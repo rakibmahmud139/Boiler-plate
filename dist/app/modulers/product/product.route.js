@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.productRoute = void 0;
+const express_1 = __importDefault(require("express"));
+const product_controller_1 = require("./product.controller");
+const auth_1 = require("../../middlewares/auth");
+const validationRequest_1 = require("../../middlewares/validationRequest");
+const product_validation_1 = require("./product.validation");
+const router = express_1.default.Router();
+router.post('/create-product', (0, auth_1.auth)('manager', 'salesman'), (0, validationRequest_1.validationRequest)(product_validation_1.productValidation.createProductValidationSchema), product_controller_1.productControllers.createProduct);
+router.get('/products', (0, auth_1.auth)('manager', 'salesman'), product_controller_1.productControllers.getAllProduct);
+router.get('/products/:id', (0, auth_1.auth)('manager', 'salesman'), product_controller_1.productControllers.getSingleProduct);
+router.put('/products/:id', (0, auth_1.auth)('manager', 'salesman'), (0, validationRequest_1.validationRequest)(product_validation_1.productValidation.updateProductValidationSchema), product_controller_1.productControllers.updateProduct);
+router.put('/duplicate-product/:id', (0, auth_1.auth)('manager', 'salesman'), (0, validationRequest_1.validationRequest)(product_validation_1.productValidation.updateProductValidationSchema), product_controller_1.productControllers.duplicateProduct);
+router.delete('/products/bulk-delete', (0, auth_1.auth)('manager'), product_controller_1.productControllers.deleteManyProduct);
+router.delete('/products/:id', (0, auth_1.auth)('manager', 'salesman'), product_controller_1.productControllers.deleteSingleProduct);
+exports.productRoute = router;
